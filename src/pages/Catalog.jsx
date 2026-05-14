@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { BudgetContext } from '../context/BudgetContext';
 import { Link } from 'react-router';
 
 export default function Catalog() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const {budgetMode} = useContext(BudgetContext);
 
     useEffect(() => {
         fetch("https://fakestoreapi.com/products")
@@ -25,6 +27,8 @@ export default function Catalog() {
             });
     }, []);
 
+    const filteredProducts = budgetMode ? products.filter((product) => product.price <= 30) : products;
+
     if (loading) return <div className="container mt-5"><p>Caricamento...</p></div>;
     if (error) return <div className="container mt-5"><p>Errore: {error}</p></div>;
 
@@ -34,7 +38,7 @@ export default function Catalog() {
       <p className="page-subtitle">Scegli tra i best seller del momento.</p>
 
       <div className="row g-4">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product.id} className="col-12 col-sm-6 col-lg-4">
             <Link
               to={"/catalog/" + product.id}
