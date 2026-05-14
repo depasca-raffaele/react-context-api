@@ -6,7 +6,7 @@ export default function Catalog() {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const {budgetMode} = useContext(BudgetContext);
+    const {maxPrice} = useContext(BudgetContext);
 
     useEffect(() => {
         fetch("https://fakestoreapi.com/products")
@@ -27,7 +27,10 @@ export default function Catalog() {
             });
     }, []);
 
-    const filteredProducts = budgetMode ? products.filter((product) => product.price <= 30) : products;
+    const isMaxPriceSet = maxPrice !== null && !Number.isNaN(maxPrice);
+    const filteredProducts = isMaxPriceSet 
+    ? products.filter((product) => product.price <= maxPrice) 
+    : products;
 
     if (loading) return <div className="container mt-5"><p>Caricamento...</p></div>;
     if (error) return <div className="container mt-5"><p>Errore: {error}</p></div>;

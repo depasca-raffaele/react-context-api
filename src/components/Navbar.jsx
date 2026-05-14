@@ -4,7 +4,20 @@ import { BudgetContext } from "../context/BudgetContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Navbar() {
-  const { budgetMode, setBudgetMode } = useContext(BudgetContext);
+  const { maxPrice, setMaxPrice } = useContext(BudgetContext);
+
+  const handleMaxPiceChange = (event) => {
+    const value = event.target.value;
+
+    if(value === "") {
+      setMaxPrice(null);
+      return
+    }
+
+    const numericValue = Number(value);
+    setMaxPrice(Number.isNaN(numericValue) ? null : numericValue);
+  };
+  
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container">
@@ -42,12 +55,28 @@ export default function Navbar() {
               </NavLink>
             </li>
           </ul>
-          <button
+
+          <div className="ms-3">
+            <label htmlFor="max-price-input" className="form-label mb1">
+              Prezzo massimo
+            </label>
+            <input 
+            type="number" 
+            id="max-price-input"
+            min="0"
+            className="form-control"
+            placeholder="Es. 30"
+            value={maxPrice ?? ""}
+            onChange={handleMaxPiceChange}
+             />
+          </div>
+
+       {/*    <button
            className={`btn ms-3 ${budgetMode ? "btn-success" : "btn-outline-success"}`}
            onClick={() => setBudgetMode(!budgetMode)}>
             {budgetMode ? "Disattiva Modalità Budget" : "Attiva Modalità Budget"}
 
-          </button>
+          </button> */}
         </div>
       </div>
     </nav>
