@@ -1,7 +1,10 @@
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { BudgetContext } from "../context/BudgetContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Navbar() {
+  const { budgetMode, setBudgetMode } = useContext(BudgetContext);
   return (
     <nav className="navbar navbar-expand-lg">
       <div className="container">
@@ -39,6 +42,12 @@ export default function Navbar() {
               </NavLink>
             </li>
           </ul>
+          <button
+           className={`btn ms-3 ${budgetMode ? "btn-success" : "btn-outline-success"}`}
+           onClick={() => setBudgetMode(!budgetMode)}>
+            {budgetMode ? "Disattiva Modalità Budget" : "Attiva Modalità Budget"}
+
+          </button>
         </div>
       </div>
     </nav>
